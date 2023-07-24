@@ -59,4 +59,4 @@ Employers can access data-driven reports and analytics to optimize their recruit
 - Task assessment feature to evaluate candidate skills.
 - Enhanced user experience through personalized recommendations and updates.
 - Data-driven insights to make informed hiring decisions.
-- The updated features now include real-time video calls for virtual interviews and a task assessment feature that allows employers to  evaluate candidate skills. These additions further enhance the job portal by providing a comprehensive platform that enables seamless communication and efficient evaluation of candidates during the interview process.
+- The updated features now include real-time video calls for virtual interviews and a task assessment feature that allows employers to  evaluate candidate skills. These additions further enhance the job portal by providing a comprehensive platform that enables seamless communication and efficient evaluation of candidates during the interview process
