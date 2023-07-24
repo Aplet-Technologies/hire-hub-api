@@ -49,10 +49,10 @@ Employers can access data-driven reports and analytics to optimize their recruit
 
 # Benefits:
 - Streamlined job search and application process for job seekers.
-Increased efficiency and reduced administrative burden for employers.
-Improved communication and transparency between job seekers and employers.
-Real-time video calls for virtual interviews, saving time and resources.
-Task assessment feature to evaluate candidate skills.
-Enhanced user experience through personalized recommendations and updates.
-Data-driven insights to make informed hiring decisions.
-The updated features now include real-time video calls for virtual interviews and a task assessment feature that allows employers to evaluate candidate skills. These additions further enhance the job portal by providing a comprehensive platform that enables seamless communication and efficient evaluation of candidates during the interview process.
+- Increased efficiency and reduced administrative burden for employers.
+- Improved communication and transparency between job seekers and employers.
+- Real-time video calls for virtual interviews, saving time and resources.
+- Task assessment feature to evaluate candidate skills.
+- Enhanced user experience through personalized recommendations and updates.
+- Data-driven insights to make informed hiring decisions.
+- The updated features now include real-time video calls for virtual interviews and a task assessment feature that allows employers to - evaluate candidate skills. These additions further enhance the job portal by providing a comprehensive platform that enables seamless - communication and efficient evaluation of candidates during the interview process.
