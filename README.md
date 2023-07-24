@@ -48,7 +48,7 @@ The system will collect and analyze data to generate insights for employers, suc
 Employers can access data-driven reports and analytics to optimize their recruitment strategies.
 
 # Benefits:
-*Streamlined job search and application process for job seekers.
+"*"Streamlined job search and application process for job seekers.
 Increased efficiency and reduced administrative burden for employers.
 Improved communication and transparency between job seekers and employers.
 Real-time video calls for virtual interviews, saving time and resources.
