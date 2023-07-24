@@ -1,0 +1,19 @@
+{
+  "name": "hire-hub-api",
+  "version": "1.0.0",
+  "description": "Comprehensive Job Portal with Job Posting, Hiring, Application, and Interview Process Management",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/faheem-cmd/hire-hub-api.git"
+  },
+  "author": "Aplet Technologies",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/faheem-cmd/hire-hub-api/issues"
+  },
+  "homepage": "https://github.com/faheem-cmd/hire-hub-api#readme"
+}
