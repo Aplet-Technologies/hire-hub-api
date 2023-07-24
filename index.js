@@ -1,11 +1,8 @@
 import express from "express";
-import path from "path";
+import "dotenv/config.js";
 
 const app = express();
-const PORT = 8000 || 5000;
 
-//routes
-
-app.listen(PORT, () => {
-  console.log(`Server started on port ${PORT}`);
+app.listen(process.env.PORT, () => {
+  console.log(`Server started on port ${process.env.PORT}`);
 });
