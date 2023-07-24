@@ -1,0 +1,45 @@
+{
+  "name": "hire-hub-api",
+  "version": "1.0.0",
+  "description": "Comprehensive Job Portal with Job Posting, Hiring, Application, and Interview Process Management",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/faheem-cmd/hire-hub-api.git"
+  },
+  "author": "Aplet Technologies",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/faheem-cmd/hire-hub-api/issues"
+  },
+  "homepage": "https://github.com/faheem-cmd/hire-hub-api#readme",
+  "devDependencies": {
+    "nodemon": "^2.0.19"
+  },
+  "dependencies": {
+    "apollo-server-express": "^3.10.0",
+    "bcrypt": "^5.0.1",
+    "body-parser": "^1.20.0",
+    "consola": "^2.15.3",
+    "cors": "^2.8.5",
+    "cross-env": "^7.0.3",
+    "dotenv": "^16.0.1",
+    "express": "^4.18.2",
+    "express-fileupload": "^1.4.0",
+    "express-formidable": "^1.2.0",
+    "express-session": "^1.17.3",
+    "fs": "^0.0.1-security",
+    "helmet": "^6.0.1",
+    "joi": "^17.6.0",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^6.4.4",
+    "morgan": "^1.10.0",
+    "multer": "^1.4.5-lts.1",
+    "onesignal-node": "^3.4.0",
+    "path": "^0.12.7"
+  }
+}
