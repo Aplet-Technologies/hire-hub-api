@@ -12,7 +12,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const app = express();
-app.use("/", router);
+app.use("/api", router);
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 const dbUrl = `mongodb://0.0.0.0:27017/${process.env.DB_URL}`;
