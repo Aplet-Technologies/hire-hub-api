@@ -2,7 +2,7 @@ import User from "../model/auth/user.model.js";
 import Jwt from "jsonwebtoken";
 import { encryptPassword, checkPassword } from "../services/MiscServices.js";
 
-export const login = async (req, res) => {
+export const signUp = async (req, res) => {
   const {
     phone,
     password,
@@ -50,6 +50,69 @@ export const login = async (req, res) => {
         data: saveUser,
       });
     }
+  } catch (error) {
+    await res.status(400).json({ message: error?.message });
+  }
+};
+
+export const login = async (req, res) => {
+  const { email, password } = req.body;
+  try {
+    const userData = await User.find({ email: email });
+    if (userData.length > 0) {
+      const user = userData[0];
+      const user_data = {
+        user_id: userData[0]._id,
+      };
+      let check = await checkPassword(password, user.password);
+      if (check) {
+        let accessToken = Jwt.sign({ user_data }, "access-key-secrete", {
+          expiresIn: "10d",
+        });
+        let refreshToken = Jwt.sign({ user_data }, "access-key-secrete", {
+          expiresIn: "30d",
+        });
+        const update = {
+          access_token: accessToken,
+          refresh_token: refreshToken,
+        };
+        await User.findOneAndUpdate({ email: email }, update, { new: true });
+        const tokens = {
+          accessToken,
+          refreshToken,
+        };
+        return res.status(200).json({
+          status: 200,
+          success: true,
+          message: "Logged in successfully",
+          data: { tokens: tokens },
+        });
+      }
+    } else {
+      return res
+        .status(404)
+        .json({ status: "error", message: "Invalid credentials" });
+    }
+  } catch (error) {
+    await res.status(400).json({ message: error?.message });
+  }
+};
+
+export const getAllUsers = async (req, res) => {
+  try {
+    const projection = {
+      _id: 0,
+      first_name: 1,
+      phone: 1,
+      email: 1,
+      isEmployer: 1,
+    };
+    const userList = await User.find({}, projection);
+    return res.status(200).json({
+      status: 200,
+      success: true,
+      data: userList,
+    });
   } catch (error) {
     await res.status(400).json({ message: error?.message });
   }
