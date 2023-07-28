@@ -1,4 +1,5 @@
 import User from "../model/auth/user.model.js";
+import Resume from "../model/auth/resume.model.js";
 import Jwt from "jsonwebtoken";
 import { encryptPassword, checkPassword } from "../services/MiscServices.js";
 
