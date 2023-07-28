@@ -8,7 +8,7 @@ import {
   signUp,
   login,
   getAllUsers,
-  uploadResume,
+  // uploadResume,
 } from "../controllers/authController.js";
 
 var authRouter = express();
@@ -40,8 +40,7 @@ const upload = multer({ storage: storage });
 
 authRouter.post("/signUp", upload.single("image"), signUp);
 authRouter.post("/login", login);
-authRouter.post("/resume", upload.single("resume"), uploadResume);
-
 authRouter.get("/all-users", getAllUsers);
+// authRouter.post("/resume", upload.single("resume"), uploadResume);
 
 export default authRouter;
