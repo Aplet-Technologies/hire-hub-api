@@ -4,12 +4,7 @@ import path from "path";
 import session from "express-session";
 import bodyParser from "body-parser";
 
-import {
-  signUp,
-  login,
-  getAllUsers,
-  // uploadResume,
-} from "../controllers/authController.js";
+import { signUp, login, getAllUsers } from "../controllers/authController.js";
 
 var authRouter = express();
 authRouter.use(bodyParser.json());
@@ -41,6 +36,5 @@ const upload = multer({ storage: storage });
 authRouter.post("/signUp", upload.single("image"), signUp);
 authRouter.post("/login", login);
 authRouter.get("/all-users", getAllUsers);
-// authRouter.post("/resume", upload.single("resume"), uploadResume);
 
 export default authRouter;
