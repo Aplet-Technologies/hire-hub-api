@@ -1,4 +1,5 @@
 import User from "../model/auth/user.model.js";
+import Resume from "../model/auth/resume.model.js";
 import Jwt from "jsonwebtoken";
 import { encryptPassword, checkPassword } from "../services/MiscServices.js";
 
@@ -112,6 +113,26 @@ export const getAllUsers = async (req, res) => {
       status: 200,
       success: true,
       data: userList,
+    });
+  } catch (error) {
+    await res.status(400).json({ message: error?.message });
+  }
+};
+
+export const uploadResume = async (req, res) => {
+  try {
+    const resumePath = req?.file?.path;
+    const resumeRelativePath = "/" + resumePath?.replace(/\\/g, "/");
+    const resumeurl =
+      req?.protocol + "://" + req?.get("host") + resumeRelativePath;
+    const resume = resumeurl;
+    let saveResume = new Resume({
+      resume: resume,
+      user_id: "64c3ab02044e8bab62feaf1e",
+    });
+
+    saveResume.save().then((data) => {
+      res.status(201).json({ status: "created", data: data, succes: true });
     });
   } catch (error) {
     await res.status(400).json({ message: error?.message });
