@@ -6,7 +6,8 @@ const CompanyAddressSchema = new mongoose.Schema({
   city: String,
   company_type: String,
   phone: String,
-  employee_size: Number,
+  employee_size: String,
+  email: String,
 });
 
 const userModel = new mongoose.Schema(
