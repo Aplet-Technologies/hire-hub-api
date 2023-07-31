@@ -107,6 +107,7 @@ export const getAllUsers = async (req, res) => {
       phone: 1,
       email: 1,
       isEmployer: 1,
+      image: 1,
     };
     const userList = await User.find({}, projection);
     return res.status(200).json({
