@@ -88,6 +88,10 @@ export const login = async (req, res) => {
           message: "Logged in successfully",
           data: { tokens: tokens },
         });
+      } else {
+        return res
+          .status(404)
+          .json({ status: "error", message: "Invalid credentials" });
       }
     } else {
       return res
@@ -95,6 +99,7 @@ export const login = async (req, res) => {
         .json({ status: "error", message: "Invalid credentials" });
     }
   } catch (error) {
+    console.log(error);
     await res.status(400).json({ message: error?.message });
   }
 };
@@ -117,5 +122,31 @@ export const getAllUsers = async (req, res) => {
     });
   } catch (error) {
     await res.status(400).json({ message: error?.message });
+  }
+};
+
+export const getUserProfile = async (req, res) => {
+  let user_id = req.user.user_data.user_id;
+  try {
+    const projection = {
+      _id: 0,
+      first_name: 1,
+      phone: 1,
+      email: 1,
+      isEmployer: 1,
+      image: 1,
+    };
+    const userData = await User.findById({ _id: user_id }, projection);
+    if (userData) {
+      await res.status(200).json({
+        status: 200,
+        success: true,
+        data: userData,
+      });
+    } else {
+      await res.status(404).json({ message: "User not found" });
+    }
+  } catch (error) {
+    await res.status(400).json({ message: error?.message || "User not found" });
   }
 };
