@@ -21,9 +21,7 @@ const dbUrl = `mongodb://0.0.0.0:27017/hirehubdb`;
 mongo(dbUrl);
 
 app.listen(8000, () => {
-  console.log(
-    `Server started on port ${process.env.PORT},connected DB ${dbUrl}`
-  );
+  console.log(`Server started on port 8000,connected DB ${dbUrl}`);
 });
 
 // app.listen(process.env.PORT, () => {
