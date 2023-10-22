@@ -68,10 +68,10 @@ export const login = async (req, res) => {
       let check = await checkPassword(password, user.password);
       if (check) {
         let accessToken = Jwt.sign({ user_data }, "access-key-secrete", {
-          expiresIn: "10d",
+          expiresIn: "1m",
         });
         let refreshToken = Jwt.sign({ user_data }, "access-key-secrete", {
-          expiresIn: "30d",
+          expiresIn: "2m",
         });
         const update = {
           access_token: accessToken,
@@ -129,7 +129,7 @@ export const getUserProfile = async (req, res) => {
   let user_id = req.user.user_data.user_id;
   try {
     const projection = {
-      _id: 0,
+      _id: 1,
       first_name: 1,
       phone: 1,
       email: 1,
@@ -150,3 +150,39 @@ export const getUserProfile = async (req, res) => {
     await res.status(400).json({ message: error?.message || "User not found" });
   }
 };
+
+export async function refreshToken(req, res) {
+  const refresh = req.body.refreshToken;
+  try {
+    const decoded = Jwt.verify(refresh, "access-key-secrete");
+    const user = await User.findOne({
+      _id: decoded.user_data?.user_id,
+      refresh,
+    });
+    if (!user) {
+      throw new Error();
+    }
+
+    const user_data = {
+      user_id: user._id,
+    };
+
+    // Generate a new access token
+    const accessToken = Jwt.sign({ user_data }, "access-key-secrete", {
+      expiresIn: "1d",
+    });
+    const refreshToken = Jwt.sign({ user_data }, "access-key-secrete", {
+      expiresIn: "7d",
+    });
+    const update = {
+      access_token: accessToken,
+      refresh_token: refreshToken,
+    };
+    const filter = { _id: user._id };
+    await User.findOneAndUpdate(filter, update, { new: true });
+    res.json({ data: update });
+    // Return the new access token
+  } catch (err) {
+    res.status(401).json({ message: "Invalid refresh token" });
+  }
+}

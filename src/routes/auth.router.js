@@ -9,6 +9,7 @@ import {
   login,
   getAllUsers,
   getUserProfile,
+  refreshToken,
 } from "../controllers/authController.js";
 import { accessToken } from "../middlewares/authMiddleware.js";
 
@@ -43,5 +44,6 @@ authRouter.post("/signUp", upload.single("image"), signUp);
 authRouter.post("/login", login);
 authRouter.get("/all-users", getAllUsers);
 authRouter.get("/profile", accessToken, getUserProfile);
+authRouter.post("/refresh", accessToken, refreshToken);
 
 export default authRouter;
