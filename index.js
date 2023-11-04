@@ -15,12 +15,17 @@ const app = express();
 app.use("/api", router);
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
-const dbUrl = `mongodb://0.0.0.0:27017/${process.env.DB_URL}`;
+// const dbUrl = `mongodb://0.0.0.0:27017/${process.env.DB_URL}`;
+const dbUrl = `mongodb://0.0.0.0:27017/hirehubdb`;
 
 mongo(dbUrl);
 
-app.listen(process.env.PORT, () => {
-  console.log(
-    `Server started on port ${process.env.PORT},connected DB ${dbUrl}`
-  );
+app.listen(8000, () => {
+  console.log(`Server started on port 8000,connected DB ${dbUrl}`);
 });
+
+// app.listen(process.env.PORT, () => {
+//   console.log(
+//     `Server started on port ${process.env.PORT},connected DB ${dbUrl}`
+//   );
+// });
