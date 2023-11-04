@@ -186,3 +186,39 @@ export async function refreshToken(req, res) {
     res.status(401).json({ message: "Invalid refresh token" });
   }
 }
+
+export async function updatePassword(req, res) {
+  try {
+    const { email, password } = req.body;
+    const encryptedPassword = await encryptPassword(password);
+
+    const user = await User.findOne({ email: email });
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const updatedUser = await User.findByIdAndUpdate(
+      user._id,
+      { password: encryptedPassword },
+      { new: true }
+    );
+
+    const yy = { password: encryptedPassword };
+
+    const updatedUsers = await User.findOneAndUpdate(
+      { _id: user._id },
+      { $set: yy },
+      { returnOriginal: false }
+    );
+
+    return res.status(200).json({
+      status: 200,
+      message: "Password updated successfully",
+      data: updatedUser,
+    });
+  } catch (error) {
+    console.error(error); // Log the error for debugging
+    return res.status(500).json({ message: "Internal server error" });
+  }
+}
