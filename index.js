@@ -15,8 +15,8 @@ const app = express();
 app.use("/api", router);
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
-// const dbUrl = `mongodb://0.0.0.0:27017/${process.env.DB_URL}`;
-const dbUrl = `mongodb://0.0.0.0:27017/hirehubdb`;
+const dbUrl = `mongodb+srv://faheemtfora:sydesNQFyzlnOIOK@cluster0.vlmalrp.mongodb.net/?retryWrites=true&w=majority`;
+// const dbUrl = `mongodb://0.0.0.0:27017/hirehubdb`;
 
 mongo(dbUrl);
 
