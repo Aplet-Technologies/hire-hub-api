@@ -16,7 +16,7 @@ import { accessToken } from "../middlewares/authMiddleware.js";
 
 var authRouter = express();
 authRouter.use(bodyParser.json());
-authRouter.use(express.static("./uploads"));
+authRouter.use(express.static("/uploads"));
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
