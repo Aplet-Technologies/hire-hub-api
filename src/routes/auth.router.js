@@ -45,7 +45,7 @@ authRouter.post("/signUp", upload.single("image"), signUp);
 authRouter.post("/login", login);
 authRouter.get("/all-users", getAllUsers);
 authRouter.get("/profile", accessToken, getUserProfile);
-authRouter.post("/refresh", accessToken, refreshToken);
+authRouter.post("/refresh", refreshToken);
 authRouter.patch("/update", updatePassword);
 
 export default authRouter;

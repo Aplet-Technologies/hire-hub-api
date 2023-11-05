@@ -10,8 +10,8 @@ export const accessToken = async (req, res, next) => {
   await Jwt.verify(token, "access-key-secrete", (err, access) => {
     filter = { _id: access?.user_data?.user_id };
 
-    User.find(filter).then((result) => {
-      const user = result[0];
+    User.findOne(filter).then((result) => {
+      const user = result;
       if (!user) {
         return res
           .status(403)
