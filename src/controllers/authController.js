@@ -136,12 +136,13 @@ export const getUserProfile = async (req, res) => {
       isEmployer: 1,
       image: 1,
     };
-    const userData = await User.findById({ _id: user_id }, projection);
+    const userData = await User.findById(user_id, projection);
     if (userData) {
       await res.status(200).json({
         status: 200,
         success: true,
         data: userData,
+        id: req.user.user_data.user_id,
       });
     } else {
       await res.status(404).json({ message: "User not found" });
@@ -191,34 +192,31 @@ export async function updatePassword(req, res) {
   try {
     const { email, password } = req.body;
     const encryptedPassword = await encryptPassword(password);
+    // const updatedUser = await User.findByIdAndUpdate(
+    //   user._id,
+    //   { password: encryptedPassword },
+    //   { new: true }
+    // );
 
-    const user = await User.findOne({ email: email });
-
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
-    }
-
-    const updatedUser = await User.findByIdAndUpdate(
-      user._id,
+    const updatedUser = await User.findOneAndUpdate(
+      { email: email },
       { password: encryptedPassword },
       { new: true }
     );
-
-    const yy = { password: encryptedPassword };
-
-    const updatedUsers = await User.findOneAndUpdate(
-      { _id: user._id },
-      { $set: yy },
-      { returnOriginal: false }
-    );
-
+    if (!updatedUser) {
+      return res
+        .status(404)
+        .json({ status: 404, success: false, message: "User not found" });
+    }
     return res.status(200).json({
       status: 200,
       message: "Password updated successfully",
-      data: updatedUser,
+      data: { data: updatedUser },
     });
   } catch (error) {
     console.error(error); // Log the error for debugging
-    return res.status(500).json({ message: "Internal server error" });
+    return res
+      .status(500)
+      .json({ status: 404, success: false, message: "Internal server error" });
   }
 }
