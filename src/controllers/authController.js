@@ -5,16 +5,6 @@ import { encryptPassword, checkPassword } from "../services/MiscServices.js";
 import { error } from "react-native-builder-bob/lib/utils/logger.js";
 import nodemailer from "nodemailer";
 
-const transporter = nodemailer.createTransport({
-  port: 465, // true for 465, false for other ports
-  host: "smtp.gmail.com",
-  auth: {
-    user: "fah@gmail.com",
-    pass: "kfu",
-  },
-  secure: true,
-});
-
 export const signUp = async (req, res) => {
   const {
     phone,
@@ -134,10 +124,10 @@ export const getAllUsers = async (req, res) => {
       text: "That was easy!",
       html: "<b>Hey there! </b>  <br> This is our first message sent with Nodemailer<br/>",
     };
-    transporter.sendMail(mailData, (error, info) => {
-      console.log(info, "mail");
-      console.log(error, "erro");
-    });
+    // transporter.sendMail(mailData, (error, info) => {
+    //   console.log(info, "mail");
+    //   console.log(error, "erro");
+    // });
     return res.status(200).json({
       status: 200,
       success: true,
