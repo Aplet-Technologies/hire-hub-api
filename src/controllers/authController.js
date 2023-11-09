@@ -2,6 +2,18 @@ import User from "../model/auth/user.model.js";
 import Resume from "../model/auth/resume.model.js";
 import Jwt from "jsonwebtoken";
 import { encryptPassword, checkPassword } from "../services/MiscServices.js";
+import { error } from "react-native-builder-bob/lib/utils/logger.js";
+import nodemailer from "nodemailer";
+
+const transporter = nodemailer.createTransport({
+  port: 465, // true for 465, false for other ports
+  host: "smtp.gmail.com",
+  auth: {
+    user: "faheem.tfora@gmail.com",
+    pass: "pror nzlz wuzk gkfu",
+  },
+  secure: true,
+});
 
 export const signUp = async (req, res) => {
   const {
@@ -115,6 +127,17 @@ export const getAllUsers = async (req, res) => {
       image: 1,
     };
     const userList = await User.find({}, projection);
+    const mailData = {
+      from: "faheem.tfora@gmail.com", // sender address
+      to: "faheem@metrictreelabs.com", // list of receivers
+      subject: "Sending Email using Node.js",
+      text: "That was easy!",
+      html: "<b>Hey there! </b>  <br> This is our first message sent with Nodemailer<br/>",
+    };
+    transporter.sendMail(mailData, (error, info) => {
+      console.log(info, "mail");
+      console.log(error, "erro");
+    });
     return res.status(200).json({
       status: 200,
       success: true,
