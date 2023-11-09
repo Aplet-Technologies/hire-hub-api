@@ -9,8 +9,8 @@ const transporter = nodemailer.createTransport({
   port: 465, // true for 465, false for other ports
   host: "smtp.gmail.com",
   auth: {
-    user: "faheem.tfora@gmail.com",
-    pass: "pror nzlz wuzk gkfu",
+    user: "fah@gmail.com",
+    pass: "kfu",
   },
   secure: true,
 });
@@ -128,8 +128,8 @@ export const getAllUsers = async (req, res) => {
     };
     const userList = await User.find({}, projection);
     const mailData = {
-      from: "faheem.tfora@gmail.com", // sender address
-      to: "faheem@metrictreelabs.com", // list of receivers
+      from: "fahee@gmail.com", // sender address
+      to: "faheem@.com", // list of receivers
       subject: "Sending Email using Node.js",
       text: "That was easy!",
       html: "<b>Hey there! </b>  <br> This is our first message sent with Nodemailer<br/>",
