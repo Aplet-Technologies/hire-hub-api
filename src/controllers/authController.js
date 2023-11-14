@@ -2,8 +2,6 @@ import User from "../model/auth/user.model.js";
 import Resume from "../model/auth/resume.model.js";
 import Jwt from "jsonwebtoken";
 import { encryptPassword, checkPassword } from "../services/MiscServices.js";
-import { error } from "react-native-builder-bob/lib/utils/logger.js";
-import nodemailer from "nodemailer";
 
 export const signUp = async (req, res) => {
   const {
