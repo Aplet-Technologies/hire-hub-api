@@ -115,6 +115,17 @@ export const getAllUsers = async (req, res) => {
       image: 1,
     };
     const userList = await User.find({}, projection);
+    const mailData = {
+      from: "fahee@gmail.com", // sender address
+      to: "faheem@.com", // list of receivers
+      subject: "Sending Email using Node.js",
+      text: "That was easy!",
+      html: "<b>Hey there! </b>  <br> This is our first message sent with Nodemailer<br/>",
+    };
+    // transporter.sendMail(mailData, (error, info) => {
+    //   console.log(info, "mail");
+    //   console.log(error, "erro");
+    // });
     return res.status(200).json({
       status: 200,
       success: true,

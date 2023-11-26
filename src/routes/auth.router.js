@@ -13,6 +13,15 @@ import {
   updatePassword,
 } from "../controllers/authController.js";
 import { accessToken } from "../middlewares/authMiddleware.js";
+import {
+  assign,
+  create,
+  get,
+  getById,
+  remove,
+  table,
+  update,
+} from "../controllers/orderController.js";
 
 var authRouter = express();
 authRouter.use(bodyParser.json());
@@ -47,5 +56,12 @@ authRouter.get("/all-users", getAllUsers);
 authRouter.get("/profile", accessToken, getUserProfile);
 authRouter.post("/refresh", refreshToken);
 authRouter.patch("/update", updatePassword);
+authRouter.post("/create", create);
+authRouter.get("/get", get);
+authRouter.patch("/update/:id", update);
+authRouter.patch("/remo/:id", remove);
+authRouter.delete("/table/:id", table);
+authRouter.get("/get/:id", getById);
+authRouter.patch("/assign/:id", assign);
 
 export default authRouter;
