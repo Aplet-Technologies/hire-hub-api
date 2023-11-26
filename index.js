@@ -17,8 +17,8 @@ const server = createServer(app); // Create an HTTP server
 app.use("/api", router);
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
-const dbUrl = `mongodb+srv://faheemtfora:sydesNQFyzlnOIOK@cluster0.vlmalrp.mongodb.net/?retryWrites=true&w=majority`;
-// const dbUrl = `mongodb://0.0.0.0:27017/hirehubdb`;
+// const dbUrl = `mongodb+srv://faheemtfora:sydesNQFyzlnOIOK@cluster0.vlmalrp.mongodb.net/?retryWrites=true&w=majority`;
+const dbUrl = `mongodb://0.0.0.0:27017/hirehubdb`;
 
 mongo(dbUrl);
 
