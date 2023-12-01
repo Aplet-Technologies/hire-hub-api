@@ -125,3 +125,20 @@ export const assign = async (req, res) => {
     await res.status(400).json({ message: error?.message });
   }
 };
+
+export const deleteRequest = async (req, res) => {
+  const { id } = req.body;
+  try {
+    const items = { _id: id };
+    const saveOrder = await Order.findByIdAndDelete(req.params.id);
+    if (!saveOrder) throw new Error("Error creating order");
+    return res.status(200).json({
+      status: 200,
+      success: true,
+      message: " removed",
+      data: saveOrder,
+    });
+  } catch (error) {
+    await res.status(400).json({ message: error?.message });
+  }
+};

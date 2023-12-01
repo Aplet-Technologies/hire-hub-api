@@ -1,4 +1,5 @@
 import User from "../model/auth/user.model.js";
+import Friends from "../model/auth/friends.model.js";
 import Resume from "../model/auth/resume.model.js";
 import Jwt from "jsonwebtoken";
 import { encryptPassword, checkPassword } from "../services/MiscServices.js";
@@ -40,7 +41,7 @@ export const signUp = async (req, res) => {
         isEmployer: isEmployer,
         phone: phone,
         image: imageRelativePath == "/" + undefined ? null : image,
-        company_address: company_address,
+        // company_address: company_address,
       });
 
       const saveUser = await saveuser.save();
@@ -68,10 +69,10 @@ export const login = async (req, res) => {
       let check = await checkPassword(password, user.password);
       if (check) {
         let accessToken = Jwt.sign({ user_data }, "access-key-secrete", {
-          expiresIn: "1m",
+          expiresIn: "1d",
         });
         let refreshToken = Jwt.sign({ user_data }, "access-key-secrete", {
-          expiresIn: "2m",
+          expiresIn: "10d",
         });
         const update = {
           access_token: accessToken,
@@ -106,33 +107,50 @@ export const login = async (req, res) => {
 
 export const getAllUsers = async (req, res) => {
   try {
+    const userId = req.user.user_data.user_id;
     const projection = {
-      _id: 0,
+      _id: 1,
       first_name: 1,
       phone: 1,
       email: 1,
       isEmployer: 1,
       image: 1,
     };
-    const userList = await User.find({}, projection);
-    const mailData = {
-      from: "fahee@gmail.com", // sender address
-      to: "faheem@.com", // list of receivers
-      subject: "Sending Email using Node.js",
-      text: "That was easy!",
-      html: "<b>Hey there! </b>  <br> This is our first message sent with Nodemailer<br/>",
-    };
-    // transporter.sendMail(mailData, (error, info) => {
-    //   console.log(info, "mail");
-    //   console.log(error, "erro");
-    // });
+
+    const users = await User.find({}, projection);
+    const friends = await Friends.find({
+      isFriend: true,
+      $or: [{ sender: userId }, { reciever: userId }],
+    });
+    const requested = await Friends.find({
+      isFriend: false,
+      sender: userId,
+      isRequested: true,
+    });
+
+    const result = users?.map((user) => {
+      const isMyFriend = friends.find(
+        (friend) => user?._id == friend?.reciever || user?._id == friend?.sender
+      );
+      const isRequested = requested.find(
+        (request) => user?._id == request?.reciever
+      );
+
+      return {
+        ...user.toObject(),
+        myFriend: isMyFriend ? true : false,
+        isRequested: isRequested ? true : false,
+        requestId: isRequested ? isRequested?._id : null,
+      };
+    });
+
     return res.status(200).json({
       status: 200,
       success: true,
-      data: userList,
+      data: result,
     });
   } catch (error) {
-    await res.status(400).json({ message: error?.message });
+    res.status(400).json({ message: error?.message });
   }
 };
 
@@ -229,5 +247,194 @@ export async function updatePassword(req, res) {
     return res
       .status(500)
       .json({ status: 404, success: false, message: "Internal server error" });
+  }
+}
+
+export async function sendRequest(req, res) {
+  let user_id = req.user.user_data.user_id;
+  const { reciever } = req.body;
+  try {
+    let saveFriends = new Friends({
+      sender: user_id,
+      reciever: reciever,
+      isFriend: false,
+      isRequested: true,
+    });
+
+    const data = await saveFriends.save();
+    await res.status(201).json({
+      status: 201,
+      success: true,
+      message: "Request sented successfully",
+      data: data,
+    });
+  } catch (error) {
+    await res.status(400).json({ message: error?.message });
+  }
+}
+
+export async function cancelRequest(req, res) {
+  let user_id = req.user.user_data.user_id;
+  const { request_id, accept } = req.body;
+
+  // Create a filter for the update
+  const filter = {
+    $and: [{ _id: request_id }, { sender: user_id }],
+  };
+
+  try {
+    const updatedRequest = await Friends.findOneAndUpdate(
+      filter,
+      { $set: { isFriend: false, isRequested: false } },
+      { new: true }
+    );
+
+    await res.status(201).json({
+      status: 200,
+      success: true,
+      data: updatedRequest,
+    });
+  } catch (error) {
+    await res.status(400).json({ message: error?.message });
+  }
+}
+
+export async function getFriendRequest(req, res) {
+  let user_id = req.user.user_data.user_id;
+  const projection = {
+    _id: 1,
+    sender: 1,
+    reciever: 1,
+    isFriend: 1,
+    isRequested: 1,
+    userId: "$user._id",
+    first_name: "$user.first_name",
+    phone: "$user.phone",
+    email: "$user.email",
+    image: "$user.image",
+  };
+  try {
+    const friends = await Friends.find({
+      reciever: user_id,
+      isFriend: false,
+      isRequested: true,
+    });
+    const result = await Friends.aggregate([
+      {
+        $match: { reciever: user_id, isFriend: false },
+      },
+      {
+        $lookup: {
+          from: "users",
+          localField: "sender", // Field in the Friends collection
+          foreignField: "_id", // Field in the User collection
+          as: "user",
+        },
+      },
+      { $unwind: "$user" },
+      {
+        $project: projection, // Apply the projection here
+      },
+    ]);
+
+    // const is_list = friends.map((item) => item.sender);
+    // const result = await User.find({ _id: { $in: is_list } }, projection);
+
+    // const modifiedResult = result.map((doc) => {
+    //   const correspondingSender = friends.find(
+    //     (sender) => sender.sender === doc._id?.toString()
+    //   );
+    //   return {
+    //     ...doc.toObject(),
+    //     request_id: correspondingSender ? correspondingSender._id : null,
+    //     isFriend: correspondingSender?.isFriend,
+    //   };
+    // });
+
+    await res.status(200).json({
+      status: 200,
+      success: true,
+      data: result,
+    });
+  } catch (error) {
+    await res.status(400).json({ message: error?.message });
+  }
+}
+
+export async function acceptRequest(req, res) {
+  let user_id = req.user.user_data.user_id;
+  const { request_id, accept } = req.body;
+
+  // Create a filter for the update
+  const filter = {
+    $and: [{ _id: request_id }, { reciever: user_id }],
+  };
+
+  try {
+    if (accept == true) {
+      const updatedRequest = await Friends.findOneAndUpdate(
+        filter,
+        { $set: { isFriend: accept, isRequested: accept } },
+        { new: true }
+      );
+
+      await res.status(201).json({
+        status: 200,
+        success: true,
+        data: updatedRequest,
+      });
+    } else {
+      const deleteRequest = await Friends.findByIdAndDelete(request_id);
+      await res.status(200).json({
+        status: 200,
+        success: true,
+        message: "Removed",
+        data: deleteRequest,
+      });
+    }
+  } catch (error) {
+    await res.status(400).json({ message: error?.message });
+  }
+}
+
+export async function getMutualFriends(req, res) {
+  let user_id = req.user.user_data.user_id;
+  const projection = {
+    _id: 1,
+    sender: 1,
+    reciever: 1,
+    isFriend: 1,
+    userId: "$user._id",
+    first_name: "$user.first_name",
+    phone: "$user.phone",
+    email: "$user.email",
+    image: "$user.image",
+  };
+  try {
+    const result = await Friends.aggregate([
+      {
+        $match: { reciever: user_id, isFriend: true },
+      },
+      {
+        $lookup: {
+          from: "users",
+          localField: "sender", // Field in the Friends collection
+          foreignField: "_id", // Field in the User collection
+          as: "user",
+        },
+      },
+      { $unwind: "$user" },
+      {
+        $project: projection, // Apply the projection here
+      },
+    ]);
+
+    await res.status(200).json({
+      status: 200,
+      success: true,
+      data: result,
+    });
+  } catch (error) {
+    await res.status(400).json({ message: error?.message });
   }
 }
