@@ -21,11 +21,11 @@ const userModel = new mongoose.Schema(
     password: { type: String, required: true },
     access_token: { type: String, default: "" },
     refresh_token: { type: String, default: "" },
-    company_address: [
-      {
-        type: CompanyAddressSchema,
-      },
-    ],
+    // company_address: [
+    //   {
+    //     type: CompanyAddressSchema,
+    //   },
+    // ],
   },
   {
     timestamps: true,

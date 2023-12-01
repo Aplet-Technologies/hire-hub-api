@@ -11,6 +11,10 @@ import {
   getUserProfile,
   refreshToken,
   updatePassword,
+  sendRequest,
+  getFriendRequest,
+  acceptRequest,
+  getMutualFriends,
 } from "../controllers/authController.js";
 import { accessToken } from "../middlewares/authMiddleware.js";
 import {
@@ -52,7 +56,7 @@ const upload = multer({ storage: storage });
 
 authRouter.post("/signUp", upload.single("image"), signUp);
 authRouter.post("/login", login);
-authRouter.get("/all-users", getAllUsers);
+authRouter.get("/all-users", accessToken, getAllUsers);
 authRouter.get("/profile", accessToken, getUserProfile);
 authRouter.post("/refresh", refreshToken);
 authRouter.patch("/update", updatePassword);
@@ -63,5 +67,10 @@ authRouter.patch("/remo/:id", remove);
 authRouter.delete("/table/:id", table);
 authRouter.get("/get/:id", getById);
 authRouter.patch("/assign/:id", assign);
+
+authRouter.post("/send-request/", accessToken, sendRequest);
+authRouter.get("/get-request/", accessToken, getFriendRequest);
+authRouter.patch("/accept/", accessToken, acceptRequest);
+authRouter.get("/mutual/", accessToken, getMutualFriends);
 
 export default authRouter;
