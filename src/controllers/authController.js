@@ -306,6 +306,7 @@ export async function getFriendRequest(req, res) {
     sender: 1,
     reciever: 1,
     isFriend: 1,
+    isRequested: 1,
     userId: "$user._id",
     first_name: "$user.first_name",
     phone: "$user.phone",
@@ -313,7 +314,11 @@ export async function getFriendRequest(req, res) {
     image: "$user.image",
   };
   try {
-    const friends = await Friends.find({ reciever: user_id, isFriend: false });
+    const friends = await Friends.find({
+      reciever: user_id,
+      isFriend: false,
+      isRequested: true,
+    });
     const result = await Friends.aggregate([
       {
         $match: { reciever: user_id, isFriend: false },
@@ -366,17 +371,27 @@ export async function acceptRequest(req, res) {
   };
 
   try {
-    const updatedRequest = await Friends.findOneAndUpdate(
-      filter,
-      { $set: { isFriend: accept, isRequested: accept } },
-      { new: true }
-    );
+    if (accept == true) {
+      const updatedRequest = await Friends.findOneAndUpdate(
+        filter,
+        { $set: { isFriend: accept, isRequested: accept } },
+        { new: true }
+      );
 
-    await res.status(201).json({
-      status: 200,
-      success: true,
-      data: updatedRequest,
-    });
+      await res.status(201).json({
+        status: 200,
+        success: true,
+        data: updatedRequest,
+      });
+    } else {
+      const deleteRequest = await Friends.findByIdAndDelete(request_id);
+      await res.status(200).json({
+        status: 200,
+        success: true,
+        message: "Removed",
+        data: deleteRequest,
+      });
+    }
   } catch (error) {
     await res.status(400).json({ message: error?.message });
   }
